@@ -1,0 +1,14 @@
+# simulation artifacts
+sim/tb
+sim/*.vcd
+*.vvp
+*.out
+
+# editor / OS
+.vscode/
+*.swp
+.DS_Store
+
+# python
+__pycache__/
+*.pyc
