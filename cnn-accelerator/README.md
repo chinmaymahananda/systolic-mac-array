@@ -15,6 +15,21 @@ Conv1 is done and bit-exact. Ran on Icarus Verilog on this machine:
 
 Next: Conv2 controller (Cin=4, Cout=8, output 4x4) following the exact same pattern -- see docs/EXTENDING.md.
 
+## Day 2 Update -- Conv2 VERIFIED, quantization scheme corrected
+
+Conv2 done, first-try pass reusing the Conv1-verified 2-cycle delay pattern:
+- All 20 golden samples PASS, 2,560 accumulator values (20 x 8 x 16) bit-exact
+
+Also fixed a real design issue in the golden model itself: v1 recomputed each
+activation's quantization scale per-sample (dynamic, runtime max-finding) --
+not realistic weight-stationary hardware, since it would make every bias
+sample-dependent. v2 uses fixed, calibrated per-tensor scales end-to-end
+(including the input layer), constrained to powers of two so the inter-layer
+requantization is a plain right-shift (ReLU -> shift -> clamp), no multiplier
+needed for the rescale step. This is the standard approach real INT8
+accelerators use. Accuracy retained: 90% on the calibration set (unchanged
+from v1, confirming the fix didn't cost accuracy).
+
 ## Status (honest, as of Day 2 of build)
 
 **Done and verified in software:**
