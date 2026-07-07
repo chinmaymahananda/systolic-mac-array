@@ -118,6 +118,14 @@ Two independent layers:
   the maximum magnitude product is bounded, and `ACC_WIDTH = 32` comfortably
   holds the sum for the tested ranges.
 
+## Extensions in progress
+
+**`cnn-accelerator/`** -- this array extended into a weight-stationary INT8
+CNN inference accelerator: a small CNN trained from scratch, quantized to
+INT8, and matched bit-exact in RTL simulation against a Python golden model
+(Conv1 verified: 20/20 samples, 2,880 accumulator values, exact match).
+Conv2 and FC layers in progress. See `cnn-accelerator/README.md`.
+
 ## Possible extensions
 
 - Weight-stationary mode with a preload phase (closer to TPU operation).
