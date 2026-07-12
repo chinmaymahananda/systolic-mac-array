@@ -1,5 +1,7 @@
 # Systolic MAC Array — Matrix-Multiply Accelerator in Verilog
 
+[![Verilog Testbench](https://github.com/chinmaymahananda/systolic-mac-array/actions/workflows/test.yml/badge.svg)](https://github.com/chinmaymahananda/systolic-mac-array/actions/workflows/test.yml)
+
 A synthesizable, fully parameterizable **output-stationary systolic array** that
 computes `C = A × B` — the matrix-multiply primitive at the heart of every neural
 network. This is the same class of architecture used in Google's TPU MXU and the
