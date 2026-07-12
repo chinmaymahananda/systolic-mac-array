@@ -1,0 +1,34 @@
+name: Verilog Testbench (Icarus Verilog)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  systolic-array-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+
+      - name: Run self-checking testbench
+        run: make
+
+  cnn-accelerator-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+
+      - name: Run top-level CNN accelerator testbench
+        working-directory: cnn-accelerator/python
+        run: |
+          iverilog -g2012 -o sim_top ../rtl/chain_mem.v ../rtl/conv1_controller.v ../rtl/conv1_mem.v ../rtl/conv2_controller.v ../rtl/conv2_mem.v ../rtl/fc_controller.v ../rtl/fc_mem.v ../rtl/mac_unit.v ../rtl/requant_bridge.v ../rtl/systolic_array.v ../rtl/top_accelerator.v ../tb/tb_top_accelerator.v
+          vvp sim_top | tee out.log
+          grep -q "PASS: all .*/.* samples bit-exact end-to-end" out.log
