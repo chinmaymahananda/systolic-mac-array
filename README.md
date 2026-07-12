@@ -118,13 +118,22 @@ Two independent layers:
   the maximum magnitude product is bounded, and `ACC_WIDTH = 32` comfortably
   holds the sum for the tested ranges.
 
-## Extensions in progress
+## Extensions
 
-**`cnn-accelerator/`** -- this array extended into a weight-stationary INT8
+`cnn-accelerator/` -- this array extended into a full weight-stationary INT8
 CNN inference accelerator: a small CNN trained from scratch, quantized to
-INT8, and matched bit-exact in RTL simulation against a Python golden model
-(Conv1 verified: 20/20 samples, 2,880 accumulator values, exact match).
-Conv2 and FC layers in progress. See `cnn-accelerator/README.md`.
+INT8, with Conv1, Conv2, and FC layers each independently verified bit-exact
+in RTL simulation against a Python golden model, then chained into a single
+top-level pipeline (`top_accelerator.v`) with a unified start/done handshake
+and interlayer requantization bridges. All 20 end-to-end calibration samples
+pass bit-exact from raw image to final FC logits, matching FP32 baseline
+accuracy (90%). See `cnn-accelerator/README.md`.
+
+**`riscv-pipelined-core`** -- a separate repository: a 4-stage pipelined
+RV32I subset core (forwarding, load-use hazard stalling, branch/JAL
+handling) carried through a full open-source ASIC flow (Yosys, OpenROAD,
+Sky130 PDK) to signed-off GDSII at 333MHz with zero DRC/LVS/routing
+violations. See github.com/chinmaymahananda/riscv-pipelined-core.
 
 ## Possible extensions
 
