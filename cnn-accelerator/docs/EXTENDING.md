@@ -26,12 +26,10 @@ Differences from Conv1:
 This is a matrix-vector product: `out[j] = sum_i(x[i] * w[i][j]) + b[j]`.
 This is where `systolic_array.v` is actually a good architectural fit: tile
 the 128x10 weight matrix through the NxN array in blocks, streaming the
-128-element input vector through. Simpler alternative if you're short on
-time: a single serial MAC unit looping 128 cycles per output (10 outputs =
-1280 cycles total) — much easier to get correct, worse throughput. For a
-7-day timeline, ship the simple version first, upgrade to the systolic
-version only if Day 6 has slack.
-
+128-element input vector through. Simpler alternative if throughput doesn't matter for your use case: a single
+serial MAC unit looping 128 cycles per output (10 outputs = 1280 cycles
+total) -- much easier to get correct, at the cost of throughput. Ship that
+first and upgrade to the systolic version once it's working end-to-end.
 ## General rule
 
 Every new controller should be verified the same way Conv1 is: golden
